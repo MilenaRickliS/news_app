@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:news_app/providers/news_provider.dart';
-import 'package:news_app/models/news.dart';
+import 'package:shimmer/shimmer.dart';
 
 void main() {
   runApp(
@@ -42,7 +42,8 @@ class NewsScreen extends StatelessWidget {
 
   Widget _buildBody(NewsProvider provider) {
     if (provider.isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      // return const Center(child: CircularProgressIndicator());
+      return shimmerLoadingList();
     }
     if (provider.error.isNotEmpty) {
       return Center(
@@ -79,4 +80,34 @@ class NewsScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget shimmerLoadingList() {
+  return ListView.builder(
+    itemCount: 6,
+    itemBuilder: (_, __) => Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey.shade300,
+        highlightColor: Colors.grey.shade100,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(width: 50, height: 50, color: Colors.white),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(height: 10, color: Colors.white),
+                  const SizedBox(height: 5),
+                  Container(height: 10, width: 150, color: Colors.white),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }
